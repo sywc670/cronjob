@@ -7,4 +7,14 @@ layout:
 - go.kubebuilder.io/v4
 projectName: cronjob
 repo: will.kubebuilder.io/cronjob
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: will.kubebuilder.io
+  group: batch
+  kind: CronJob
+  path: will.kubebuilder.io/cronjob/api/v1
+  version: v1
 version: "3"
