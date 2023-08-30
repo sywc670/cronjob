@@ -17,6 +17,8 @@ limitations under the License.
 package v1
 
 import (
+	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -28,14 +30,67 @@ type CronJobSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of CronJob. Edit cronjob_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// +kubebuilder:validation:MinLength=0
+
+	// Schedule in cron format.
+	Schedule string `json:"schedule"`
+
+	// +kubebuilder:validation:Minimum=0
+
+	// Deadline in seconds for starting the job if it missed the scheduled time.
+	// +optional
+	StartingDeadlineSeconds *int64 `json:"startingDeadlineSeconds,omitempty"`
+
+	// Valid values are:
+	// - "Allow"
+	// - "Replace"
+	// - "Forbid"
+	// +optional
+	ConcurrencyPolicy ConcurrencyPolicy `json:"concurrencyPolicy,omitempty"`
+
+	// Suspend the subsequent executions. Doesn't affect already started executions.
+	// +optional
+	Suspend *bool `json:"suspend,omitempty"`
+
+	JobTemplate batchv1.JobTemplateSpec `json:"jobTemplate"`
+
+	// +kubebuilder:validation:Minimum=0
+
+	// Successful finished job history limit.
+	// +optional
+	SuccessfulJobsHistoryLimit *int32 `json:"successfulJobsHistoryLimit,omitempty"`
+
+	// +kubebuilder:validation:Minimum=0
+
+	// The number of failed finished jobs to retain.
+	// +optional
+	FailedJobsHistoryLimit *int32 `json:"failedJobsHistoryLimit,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Allow;Replace;Forbid
+
+type ConcurrencyPolicy string
+
+const (
+	AllowConcurrent ConcurrencyPolicy = "Allow"
+
+	ForbidConcurrent ConcurrencyPolicy = "Forbid"
+
+	ReplaceConcurrent ConcurrencyPolicy = "Replace"
+)
 
 // CronJobStatus defines the observed state of CronJob
 type CronJobStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	// A list of pointers to currently running jobs.
+	// +optional
+	Active []corev1.ObjectReference `json:"active,omitempty"`
+
+	// Information when was the last time the job was successfully scheduled.
+	// +optional
+	LastScheduleTime *metav1.Time `json:"lastScheduleTime,omitempty"`
 }
 
 //+kubebuilder:object:root=true
