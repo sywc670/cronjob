@@ -54,8 +54,32 @@ func (_ realClock) Now() time.Time {
 //+kubebuilder:rbac:groups=batch.will.kubebuilder.io,resources=cronjobs,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=batch.will.kubebuilder.io,resources=cronjobs/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=batch.will.kubebuilder.io,resources=cronjobs/finalizers,verbs=update
-//+kubebuidler:rbac:groups=batch,resources=jobs,verbs=get;list;watch;create;update;patch;delete
-//+kubebuidler:rbac:groups=batch,resources=jobs/status,verbs=get
+//+kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=batch,resources=jobs/status,verbs=get
+
+// NOTE: I encounter a bug that using the same marker has no effect on the role.yaml file.
+// It's a weird bug, after I copy and edit the same marker, it works.
+// When the bug occurs, add the following lines to the role.yaml file:
+// - apiGroups:
+//   - batch
+//   resources:
+//   - jobs
+//   verbs:
+//   - create
+//   - delete
+//   - get
+//   - list
+//   - patch
+//   - update
+//   - watch
+// - apiGroups:
+//   - batch
+//   resources:
+//   - jobs/status
+//   verbs:
+//   - get
+//   - patch
+//   - update
 
 var scheduleTimeAnnotation = "batch.will.kubebuilder.io/scheduled-at"
 
