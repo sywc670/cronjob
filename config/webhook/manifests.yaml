@@ -15,7 +15,7 @@ webhooks:
   name: mcronjob.kb.io
   rules:
   - apiGroups:
-    - batch.will.io
+    - batch.will.kubebuilder.io
     apiVersions:
     - v1
     operations:
@@ -41,7 +41,7 @@ webhooks:
   name: vcronjob.kb.io
   rules:
   - apiGroups:
-    - batch.will.io
+    - batch.will.kubebuilder.io
     apiVersions:
     - v1
     operations:

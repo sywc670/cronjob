@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/created-by: cronjob
   name: cronjob-sample
 spec:
-  schedule: "*/1 * * * * fail"
+  schedule: "fail/1 * * * * fail"
   startingDeadlineSeconds: 60
   concurrencyPolicy: Allow # explicitly specify, but Allow is also default.
   jobTemplate:

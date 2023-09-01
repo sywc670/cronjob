@@ -39,7 +39,7 @@ func (r *CronJob) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
-//+kubebuilder:webhook:path=/mutate-batch-will-kubebuilder-io-v1-cronjob,mutating=true,failurePolicy=fail,sideEffects=None,groups=batch.will.io,resources=cronjobs,verbs=create;update,versions=v1,name=mcronjob.kb.io,admissionReviewVersions=v1
+//+kubebuilder:webhook:path=/mutate-batch-will-kubebuilder-io-v1-cronjob,mutating=true,failurePolicy=fail,sideEffects=None,groups=batch.will.kubebuilder.io,resources=cronjobs,verbs=create;update,versions=v1,name=mcronjob.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &CronJob{}
 
@@ -64,7 +64,7 @@ func (r *CronJob) Default() {
 }
 
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
-//+kubebuilder:webhook:path=/validate-batch-will-kubebuilder-io-v1-cronjob,mutating=false,failurePolicy=fail,sideEffects=None,groups=batch.will.io,resources=cronjobs,verbs=create;update;delete,versions=v1,name=vcronjob.kb.io,admissionReviewVersions=v1
+//+kubebuilder:webhook:path=/validate-batch-will-kubebuilder-io-v1-cronjob,mutating=false,failurePolicy=fail,sideEffects=None,groups=batch.will.kubebuilder.io,resources=cronjobs,verbs=create;update;delete,versions=v1,name=vcronjob.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &CronJob{}
 
