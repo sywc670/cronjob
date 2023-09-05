@@ -19,6 +19,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"k8s.io/client-go/tools/record"
 	"sort"
 	"time"
 
@@ -37,7 +38,8 @@ import (
 // CronJobReconciler reconciles a CronJob object
 type CronJobReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme   *runtime.Scheme
+	Recorder record.EventRecorder
 	Clock
 }
 
@@ -56,6 +58,7 @@ func (_ realClock) Now() time.Time {
 //+kubebuilder:rbac:groups=batch.will.kubebuilder.io,resources=cronjobs/finalizers,verbs=update
 //+kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=batch,resources=jobs/status,verbs=get
+//+kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
 
 // NOTE: I encounter a bug that using the same marker has no effect on the role.yaml file.
 // It's a weird bug, after I copy and edit the same marker, it works.
@@ -333,6 +336,12 @@ func (r *CronJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		log.Error(err, "unable to create new job")
 		return ctrl.Result{}, err
 	}
+
+	// The following implementation will raise an event
+	r.Recorder.Event(&cronjob, "Normal", "CreatedJob",
+		fmt.Sprintf("Job: %s is being created from the namespace %s",
+			job.Name,
+			job.Namespace))
 
 	log.V(1).Info("created new job", "job", job)
 
